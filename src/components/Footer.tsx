@@ -24,17 +24,17 @@ export default function Footer({ logoSrc }: FooterProps) {
     {
       name: 'Facebook',
       icon: <FaFacebookF size={18} />,
-      href: 'https://facebook.com/',
+      href: 'https://www.facebook.com/share/1CQyPwJiPi/',
     },
     {
       name: 'TikTok',
       icon: <FaTiktok size={18} />,
-      href: 'https://tiktok.com/',
+      href: 'https://www.tiktok.com/@teamqora?_r=1&_t=ZS-9AcvD5IByc9',
     },
     {
       name: 'Instagram',
       icon: <FaInstagram size={18} />,
-      href: 'https://instagram.com/',
+      href: 'https://www.instagram.com/teamqora?vrfl=c3p1YmFhdTJ1ZDA=',
     },
   ];
 

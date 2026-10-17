@@ -16,7 +16,7 @@ export const SERVICES = [
     title: 'Web Development',
     description:
       'Build responsive, functional, and engaging websites and digital experiences.',
-    icon: '🌐',
+    icon: '',
     category: 'technical',
   },
   {
@@ -24,7 +24,7 @@ export const SERVICES = [
     title: 'Graphic Design',
     description:
       'Create visual communication that gives brands a distinctive and professional presence.',
-    icon: '🎨',
+    icon: '',
     category: 'creative',
   },
   {
@@ -32,7 +32,7 @@ export const SERVICES = [
     title: 'Branding & Visual Identity',
     description:
       'Develop consistent brand identities that communicate value and personality.',
-    icon: '✨',
+    icon: '',
     category: 'strategy',
   },
   {
@@ -40,7 +40,7 @@ export const SERVICES = [
     title: 'Digital Marketing',
     description:
       'Support brand visibility, audience engagement, and digital growth.',
-    icon: '📈',
+    icon: '',
     category: 'marketing',
   },
   {
@@ -48,7 +48,7 @@ export const SERVICES = [
     title: 'Mobile App Development',
     description:
       'Develop mobile experiences for businesses and their customers.',
-    icon: '📱',
+    icon: '',
     category: 'technical',
   },
   {
@@ -56,7 +56,7 @@ export const SERVICES = [
     title: 'Copywriting',
     description:
       'Craft compelling, persuasive copy that drives engagement and conversions for your brand.',
-    icon: '✍️',
+    icon: '',
     category: 'creative',
   },
   {
@@ -64,7 +64,7 @@ export const SERVICES = [
     title: 'Social Media Management',
     description:
       'Manage your social presence with strategic content, community engagement, and growth.',
-    icon: '📱💬',
+    icon: '',
     category: 'marketing',
   },
   {
@@ -72,7 +72,7 @@ export const SERVICES = [
     title: 'Other Digital Solutions',
     description:
       'Tailored creative and technical support based on your brand\'s needs.',
-    icon: '🚀',
+    icon: '',
     category: 'other',
   },
 ]

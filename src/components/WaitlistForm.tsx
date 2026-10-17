@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import type { ChangeEvent, FormEvent } from 'react';
 import { supabase } from '../lib/supabase';
 import { SERVICES } from '../lib/constants';
 import toast from 'react-hot-toast';
@@ -20,24 +21,24 @@ export default function WaitlistForm({
   const [selectedServices, setSelectedServices] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
 
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       [name]: value,
     }));
   };
 
   const handleServiceToggle = (serviceId: string) => {
-    setSelectedServices(prev =>
+    setSelectedServices((prev) =>
       prev.includes(serviceId)
-        ? prev.filter(s => s !== serviceId)
+        ? prev.filter((s) => s !== serviceId)
         : [...prev, serviceId]
     );
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     // Validation
@@ -59,12 +60,14 @@ export default function WaitlistForm({
     setLoading(true);
 
     try {
+      const submittedEmail = formData.email.trim().toLowerCase();
+
       const { error } = await supabase
         .from('waitlist')
         .insert([
           {
             full_name: formData.fullName.trim(),
-            email: formData.email.trim().toLowerCase(),
+            email: submittedEmail,
             company_name: formData.company.trim() || null,
             phone_number: formData.phone.trim() || null,
             services: selectedServices,
@@ -84,7 +87,10 @@ export default function WaitlistForm({
       }
 
       toast.success('🎉 Successfully joined the waitlist!');
-      onSuccess?.(formData.email.trim().toLowerCase());
+
+      // Open success modal through parent component
+      onSuccess?.(submittedEmail);
+
       // Reset form
       setFormData({
         fullName: '',
@@ -95,12 +101,12 @@ export default function WaitlistForm({
 
       setSelectedServices([]);
 
-      // Optional: Redirect to WhatsApp after 2 seconds
+      // Existing WhatsApp redirect
       setTimeout(() => {
         const whatsappLink = import.meta.env.VITE_WHATSAPP_GROUP_LINK;
 
         if (whatsappLink) {
-          window.open(whatsappLink, '_blank');
+          window.open(whatsappLink, '_blank', 'noopener,noreferrer');
         }
       }, 2000);
 
@@ -112,25 +118,25 @@ export default function WaitlistForm({
     }
   };
 
-  // Shared input styling
+  // Shared input styles
   const inputClassName = `
     w-full
     px-4
     py-3.5
     rounded-xl
-    bg-white/[0.04]
+    bg-[#FAF8FF]
     border
-    border-white/15
-    text-white
+    border-purple-100
+    text-[#171126]
     text-sm
     sm:text-base
-    placeholder:text-gray-500
+    placeholder:text-gray-400
     outline-none
     transition-all
     duration-300
-    hover:border-white/25
+    hover:border-purple-300
     focus:border-purple-500
-    focus:bg-purple-500/[0.05]
+    focus:bg-white
     focus:ring-4
     focus:ring-purple-500/10
     disabled:opacity-50
@@ -140,32 +146,29 @@ export default function WaitlistForm({
   const labelClassName = `
     block
     text-sm
-    font-medium
-    text-gray-200
+    font-semibold
+    text-[#171126]
     mb-2.5
   `;
 
   return (
     <form
       onSubmit={handleSubmit}
-      className="w-full max-w-2xl mx-auto space-y-8"
+      className="w-full max-w-2xl mx-auto space-y-9"
     >
-
       {/* PERSONAL INFORMATION */}
       <div className="space-y-6">
-
-        {/* Section Label */}
+        {/* Section Heading */}
         <div className="flex items-center gap-3 pb-2">
-          <div className="w-1 h-5 rounded-full bg-purple-500" />
+          <div className="w-1 h-5 rounded-full bg-purple-600" />
 
-          <h4 className="text-sm font-semibold text-white uppercase tracking-wider">
+          <h4 className="text-sm font-bold text-[#171126] uppercase tracking-wider">
             Your Information
           </h4>
         </div>
 
-        {/* Inputs Grid */}
+        {/* Input Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-
           {/* Full Name */}
           <div>
             <label
@@ -173,13 +176,14 @@ export default function WaitlistForm({
               className={labelClassName}
             >
               Full Name
-              <span className="text-purple-400 ml-1">*</span>
+              <span className="text-purple-600 ml-1">*</span>
             </label>
 
             <input
               id="fullName"
               type="text"
               name="fullName"
+              autoComplete="name"
               value={formData.fullName}
               onChange={handleInputChange}
               placeholder="John Doe"
@@ -196,13 +200,14 @@ export default function WaitlistForm({
               className={labelClassName}
             >
               Email Address
-              <span className="text-purple-400 ml-1">*</span>
+              <span className="text-purple-600 ml-1">*</span>
             </label>
 
             <input
               id="email"
               type="email"
               name="email"
+              autoComplete="email"
               value={formData.email}
               onChange={handleInputChange}
               placeholder="john@example.com"
@@ -219,7 +224,7 @@ export default function WaitlistForm({
               className={labelClassName}
             >
               Company Name
-              <span className="text-gray-500 text-xs ml-2">
+              <span className="text-gray-400 text-xs font-normal ml-2">
                 Optional
               </span>
             </label>
@@ -228,6 +233,7 @@ export default function WaitlistForm({
               id="company"
               type="text"
               name="company"
+              autoComplete="organization"
               value={formData.company}
               onChange={handleInputChange}
               placeholder="Your Company Inc."
@@ -243,7 +249,7 @@ export default function WaitlistForm({
               className={labelClassName}
             >
               Phone Number
-              <span className="text-gray-500 text-xs ml-2">
+              <span className="text-gray-400 text-xs font-normal ml-2">
                 Optional
               </span>
             </label>
@@ -252,6 +258,7 @@ export default function WaitlistForm({
               id="phone"
               type="tel"
               name="phone"
+              autoComplete="tel"
               value={formData.phone}
               onChange={handleInputChange}
               placeholder="+1 (555) 123-4567"
@@ -259,43 +266,43 @@ export default function WaitlistForm({
               disabled={loading}
             />
           </div>
-
         </div>
       </div>
 
       {/* SERVICES SELECTION */}
       <div className="space-y-5">
-
-        {/* Section Heading */}
-        <div className="flex items-center justify-between gap-3">
-
+        {/* Section Header */}
+        <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-3">
-            <div className="w-1 h-5 rounded-full bg-purple-500" />
+            <div className="w-1 h-5 rounded-full bg-purple-600" />
 
-            <h4 className="text-sm font-semibold text-white uppercase tracking-wider">
+            <h4 className="text-sm font-bold text-[#171126] uppercase tracking-wider">
               Services Interested In
-              <span className="text-purple-400 ml-1">*</span>
+              <span className="text-purple-600 ml-1">*</span>
             </h4>
           </div>
 
-          {/* Selected Count */}
+          {/* Selected Counter */}
           <span
-            className="text-xs
-            px-3 py-1
-            rounded-full
-            bg-purple-500/10
-            border border-purple-500/20
-            text-purple-300
-            whitespace-nowrap"
+            className="
+              text-xs
+              font-semibold
+              px-3
+              py-1.5
+              rounded-full
+              bg-purple-100
+              border
+              border-purple-200
+              text-purple-700
+              whitespace-nowrap
+            "
           >
             {selectedServices.length} Selected
           </span>
-
         </div>
 
         {/* Service Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-
           {SERVICES.map((service) => {
             const isSelected = selectedServices.includes(service.id);
 
@@ -316,8 +323,8 @@ export default function WaitlistForm({
                   duration-300
                   ${
                     isSelected
-                      ? 'bg-purple-600/15 border-purple-500 shadow-[0_0_20px_rgba(139,92,246,0.08)]'
-                      : 'bg-white/[0.03] border-white/10 hover:border-purple-500/40 hover:bg-white/[0.06]'
+                      ? 'bg-purple-50 border-purple-500 shadow-sm shadow-purple-500/10'
+                      : 'bg-[#FAF8FF] border-purple-100 hover:border-purple-300 hover:bg-purple-50/50'
                   }
                   ${
                     loading
@@ -326,12 +333,14 @@ export default function WaitlistForm({
                   }
                 `}
               >
-
                 {/* Checkbox */}
                 <input
                   type="checkbox"
+                  name="services"
+                  value={service.id}
                   checked={isSelected}
                   onChange={() => handleServiceToggle(service.id)}
+                  disabled={loading}
                   className="
                     w-4
                     h-4
@@ -339,17 +348,17 @@ export default function WaitlistForm({
                     cursor-pointer
                     accent-purple-600
                     focus:ring-purple-500
+                    disabled:cursor-not-allowed
                   "
-                  disabled={loading}
                 />
 
-                {/* Icon */}
+                {/* Service Icon */}
                 <div
                   className={`
-                    w-10
-                    h-10
+                    w-11
+                    h-11
                     flex-shrink-0
-                    rounded-lg
+                    rounded-xl
                     flex
                     items-center
                     justify-center
@@ -358,47 +367,59 @@ export default function WaitlistForm({
                     duration-300
                     ${
                       isSelected
-                        ? 'bg-purple-500/20'
-                        : 'bg-white/[0.05] group-hover:bg-purple-500/10'
+                        ? 'bg-purple-100'
+                        : 'bg-white border border-purple-100 group-hover:bg-purple-100'
                     }
                   `}
                 >
                   {service.icon}
                 </div>
 
-                {/* Service Title */}
+                {/* Service Name */}
                 <span
                   className={`
                     text-sm
-                    font-medium
+                    font-semibold
                     leading-snug
                     transition-colors
                     ${
                       isSelected
-                        ? 'text-white'
-                        : 'text-gray-300 group-hover:text-white'
+                        ? 'text-purple-800'
+                        : 'text-[#171126] group-hover:text-purple-700'
                     }
                   `}
                 >
                   {service.title}
                 </span>
 
+                {/* Selected Indicator */}
+                {isSelected && (
+                  <span
+                    className="
+                      absolute
+                      top-2
+                      right-2
+                      w-2
+                      h-2
+                      bg-purple-600
+                      rounded-full
+                    "
+                  />
+                )}
               </label>
             );
           })}
-
         </div>
 
         {/* Helper Text */}
-        <p className="text-xs text-gray-500">
-          Select at least one service. You can choose multiple options.
+        <p className="text-xs text-[#8A8296] leading-relaxed">
+          Select at least one service. You can choose multiple options
+          based on your business needs.
         </p>
-
       </div>
 
-      {/* SUBMIT */}
+      {/* SUBMIT BUTTON */}
       <div className="pt-3">
-
         <button
           type="submit"
           disabled={loading}
@@ -419,10 +440,11 @@ export default function WaitlistForm({
             to-purple-700
             text-white
             text-base
-            font-semibold
+            font-bold
             shadow-lg
-            shadow-purple-700/20
-            hover:shadow-purple-600/40
+            shadow-purple-600/20
+            hover:shadow-xl
+            hover:shadow-purple-600/30
             hover:-translate-y-0.5
             active:translate-y-0
             transition-all
@@ -432,7 +454,6 @@ export default function WaitlistForm({
             disabled:hover:translate-y-0
           "
         >
-
           {/* Loading Spinner */}
           {loading && (
             <svg
@@ -469,16 +490,13 @@ export default function WaitlistForm({
               →
             </span>
           )}
-
         </button>
 
         {/* Privacy Note */}
-        <p className="text-center text-xs text-gray-500 leading-relaxed mt-5">
+        <p className="text-center text-xs text-[#8A8296] leading-relaxed mt-5">
           We respect your privacy. Your information will never be shared.
         </p>
-
       </div>
-
     </form>
   );
 }
