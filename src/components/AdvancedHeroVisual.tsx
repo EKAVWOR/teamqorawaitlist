@@ -160,8 +160,7 @@ export const AdvancedHeroVisual: React.FC = () => {
 
         {/* Connecting lines between nodes */}
         {services.map((_, i) => {
-          const current = services[i];
-          const next = services[(i + 1) % services.length];
+          
           const angle1 = (i / services.length) * Math.PI * 2;
           const angle2 = (((i + 1) % services.length) / services.length) *
             Math.PI * 2;

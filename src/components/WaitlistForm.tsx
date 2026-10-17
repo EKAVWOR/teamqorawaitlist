@@ -3,7 +3,13 @@ import { supabase } from '../lib/supabase';
 import { SERVICES } from '../lib/constants';
 import toast from 'react-hot-toast';
 
-export default function WaitlistForm() {
+interface WaitlistFormProps {
+  onSuccess?: (email: string) => void;
+}
+
+export default function WaitlistForm({
+  onSuccess,
+}: WaitlistFormProps) {
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
@@ -78,7 +84,7 @@ export default function WaitlistForm() {
       }
 
       toast.success('🎉 Successfully joined the waitlist!');
-
+      onSuccess?.(formData.email.trim().toLowerCase());
       // Reset form
       setFormData({
         fullName: '',
