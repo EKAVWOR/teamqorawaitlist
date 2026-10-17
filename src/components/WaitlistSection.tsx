@@ -7,8 +7,7 @@ import {
   Gift,
   Users,
   Sparkles,
-  CheckCircle2,
-  ArrowRight,
+  CheckCircle2
 } from 'lucide-react';
 
 import WaitlistForm from './WaitlistForm';
