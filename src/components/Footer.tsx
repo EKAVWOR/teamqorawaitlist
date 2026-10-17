@@ -303,7 +303,7 @@ export default function Footer({ logoSrc }: FooterProps) {
 
             {/* Email */}
             <a
-              href="mailto:info@teamqora.com"
+              href="mailto:teamqora1@gmail.com"
               className="
                 flex
                 items-center
@@ -336,13 +336,13 @@ export default function Footer({ logoSrc }: FooterProps) {
               </div>
 
               <span className="text-sm break-all">
-                info@teamqora.com
+                teamqora1@gmail.com
               </span>
             </a>
 
             {/* Contact Link */}
             <a
-              href="mailto:info@teamqora.com"
+              href="mailto:teamqora1@gmail.com"
               className="
                 inline-flex
                 items-center
