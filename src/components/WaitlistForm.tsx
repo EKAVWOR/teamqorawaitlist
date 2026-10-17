@@ -41,7 +41,6 @@ export default function WaitlistForm({
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // Validation
     if (!formData.fullName.trim()) {
       toast.error('Full name is required');
       return;
@@ -88,7 +87,7 @@ export default function WaitlistForm({
 
       toast.success('🎉 Successfully joined the waitlist!');
 
-      // Open success modal through parent component
+      // Open success modal
       onSuccess?.(submittedEmail);
 
       // Reset form
@@ -101,7 +100,7 @@ export default function WaitlistForm({
 
       setSelectedServices([]);
 
-      // Existing WhatsApp redirect
+      // WhatsApp redirect
       setTimeout(() => {
         const whatsappLink = import.meta.env.VITE_WHATSAPP_GROUP_LINK;
 
@@ -118,27 +117,29 @@ export default function WaitlistForm({
     }
   };
 
-  // Shared input styles
+  // Premium input styling
   const inputClassName = `
     w-full
-    px-4
-    py-3.5
+    px-5
+    py-4
     rounded-xl
     bg-[#FAF8FF]
     border
-    border-purple-100
+    border-purple-200
     text-[#171126]
-    text-sm
-    sm:text-base
+    text-base
+    sm:text-lg
+    font-bold
     placeholder:text-gray-400
+    placeholder:font-normal
     outline-none
     transition-all
     duration-300
-    hover:border-purple-300
-    focus:border-purple-500
+    hover:border-purple-400
+    focus:border-purple-600
     focus:bg-white
     focus:ring-4
-    focus:ring-purple-500/10
+    focus:ring-purple-500/15
     disabled:opacity-50
     disabled:cursor-not-allowed
   `;
@@ -146,7 +147,8 @@ export default function WaitlistForm({
   const labelClassName = `
     block
     text-sm
-    font-semibold
+    sm:text-base
+    font-bold
     text-[#171126]
     mb-2.5
   `;
@@ -154,11 +156,12 @@ export default function WaitlistForm({
   return (
     <form
       onSubmit={handleSubmit}
-      className="w-full max-w-2xl mx-auto space-y-9"
+      className="w-full max-w-2xl mx-auto space-y-8"
     >
+
       {/* PERSONAL INFORMATION */}
-      <div className="space-y-6">
-        {/* Section Heading */}
+      <div className="space-y-5">
+
         <div className="flex items-center gap-3 pb-2">
           <div className="w-1 h-5 rounded-full bg-purple-600" />
 
@@ -167,16 +170,12 @@ export default function WaitlistForm({
           </h4>
         </div>
 
-        {/* Input Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+
           {/* Full Name */}
           <div>
-            <label
-              htmlFor="fullName"
-              className={labelClassName}
-            >
-              Full Name
-              <span className="text-purple-600 ml-1">*</span>
+            <label htmlFor="fullName" className={labelClassName}>
+              Full Name <span className="text-purple-600">*</span>
             </label>
 
             <input
@@ -187,7 +186,7 @@ export default function WaitlistForm({
               value={formData.fullName}
               onChange={handleInputChange}
               placeholder="John Doe"
-              className={inputClassName}
+              className={`${inputClassName} font-extrabold`}
               disabled={loading}
               required
             />
@@ -195,12 +194,8 @@ export default function WaitlistForm({
 
           {/* Email */}
           <div>
-            <label
-              htmlFor="email"
-              className={labelClassName}
-            >
-              Email Address
-              <span className="text-purple-600 ml-1">*</span>
+            <label htmlFor="email" className={labelClassName}>
+              Email Address <span className="text-purple-600">*</span>
             </label>
 
             <input
@@ -219,10 +214,7 @@ export default function WaitlistForm({
 
           {/* Company */}
           <div>
-            <label
-              htmlFor="company"
-              className={labelClassName}
-            >
+            <label htmlFor="company" className={labelClassName}>
               Company Name
               <span className="text-gray-400 text-xs font-normal ml-2">
                 Optional
@@ -244,10 +236,7 @@ export default function WaitlistForm({
 
           {/* Phone */}
           <div>
-            <label
-              htmlFor="phone"
-              className={labelClassName}
-            >
+            <label htmlFor="phone" className={labelClassName}>
               Phone Number
               <span className="text-gray-400 text-xs font-normal ml-2">
                 Optional
@@ -266,13 +255,16 @@ export default function WaitlistForm({
               disabled={loading}
             />
           </div>
+
         </div>
       </div>
 
       {/* SERVICES SELECTION */}
       <div className="space-y-5">
-        {/* Section Header */}
+
+        {/* Heading */}
         <div className="flex flex-wrap items-center justify-between gap-3">
+
           <div className="flex items-center gap-3">
             <div className="w-1 h-5 rounded-full bg-purple-600" />
 
@@ -282,27 +274,15 @@ export default function WaitlistForm({
             </h4>
           </div>
 
-          {/* Selected Counter */}
-          <span
-            className="
-              text-xs
-              font-semibold
-              px-3
-              py-1.5
-              rounded-full
-              bg-purple-100
-              border
-              border-purple-200
-              text-purple-700
-              whitespace-nowrap
-            "
-          >
+          <span className="text-xs font-semibold px-3 py-1.5 rounded-full bg-purple-100 border border-purple-200 text-purple-700">
             {selectedServices.length} Selected
           </span>
+
         </div>
 
-        {/* Service Cards */}
+        {/* Services Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+
           {SERVICES.map((service) => {
             const isSelected = selectedServices.includes(service.id);
 
@@ -315,7 +295,8 @@ export default function WaitlistForm({
                   flex
                   items-center
                   gap-3
-                  p-4
+                  px-4
+                  py-3.5
                   rounded-xl
                   border
                   cursor-pointer
@@ -333,6 +314,7 @@ export default function WaitlistForm({
                   }
                 `}
               >
+
                 {/* Checkbox */}
                 <input
                   type="checkbox"
@@ -345,70 +327,32 @@ export default function WaitlistForm({
                     w-4
                     h-4
                     flex-shrink-0
-                    cursor-pointer
                     accent-purple-600
-                    focus:ring-purple-500
+                    cursor-pointer
                     disabled:cursor-not-allowed
                   "
                 />
 
-                {/* Service Icon */}
-                <div
-                  className={`
-                    w-11
-                    h-11
-                    flex-shrink-0
-                    rounded-xl
-                    flex
-                    items-center
-                    justify-center
-                    text-xl
-                    transition-all
-                    duration-300
-                    ${
-                      isSelected
-                        ? 'bg-purple-100'
-                        : 'bg-white border border-purple-100 group-hover:bg-purple-100'
-                    }
-                  `}
-                >
-                  {service.icon}
-                </div>
-
                 {/* Service Name */}
                 <span
-                  className={`
-                    text-sm
-                    font-semibold
-                    leading-snug
-                    transition-colors
-                    ${
-                      isSelected
-                        ? 'text-purple-800'
-                        : 'text-[#171126] group-hover:text-purple-700'
-                    }
-                  `}
+                  className={`text-sm font-semibold leading-snug ${
+                    isSelected
+                      ? 'text-purple-800'
+                      : 'text-[#171126] group-hover:text-purple-700'
+                  }`}
                 >
                   {service.title}
                 </span>
 
                 {/* Selected Indicator */}
                 {isSelected && (
-                  <span
-                    className="
-                      absolute
-                      top-2
-                      right-2
-                      w-2
-                      h-2
-                      bg-purple-600
-                      rounded-full
-                    "
-                  />
+                  <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-purple-600" />
                 )}
+
               </label>
             );
           })}
+
         </div>
 
         {/* Helper Text */}
@@ -416,16 +360,17 @@ export default function WaitlistForm({
           Select at least one service. You can choose multiple options
           based on your business needs.
         </p>
+
       </div>
 
       {/* SUBMIT BUTTON */}
       <div className="pt-3">
+
         <button
           type="submit"
           disabled={loading}
           className="
             group
-            relative
             w-full
             flex
             items-center
@@ -446,7 +391,6 @@ export default function WaitlistForm({
             hover:shadow-xl
             hover:shadow-purple-600/30
             hover:-translate-y-0.5
-            active:translate-y-0
             transition-all
             duration-300
             disabled:opacity-60
@@ -454,6 +398,7 @@ export default function WaitlistForm({
             disabled:hover:translate-y-0
           "
         >
+
           {/* Loading Spinner */}
           {loading && (
             <svg
@@ -480,9 +425,7 @@ export default function WaitlistForm({
           )}
 
           <span>
-            {loading
-              ? 'Joining Waitlist...'
-              : 'Join the Waitlist'}
+            {loading ? 'Joining Waitlist...' : 'Join the Waitlist'}
           </span>
 
           {!loading && (
@@ -490,13 +433,16 @@ export default function WaitlistForm({
               →
             </span>
           )}
+
         </button>
 
         {/* Privacy Note */}
         <p className="text-center text-xs text-[#8A8296] leading-relaxed mt-5">
           We respect your privacy. Your information will never be shared.
         </p>
+
       </div>
+
     </form>
   );
 }
